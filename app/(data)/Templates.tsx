@@ -244,17 +244,12 @@ export default [
         slug: 'generate-post',
         form: [
             {
-                label: 'Enter your blog niche',
+                label: 'Enter Keywords for your post',
                 field: 'input',
                 name: 'niche',
                 required: true
             },
-            {
-                label: 'Enter blog outline',
-                field: 'textarea',
-                name: 'outline',
-                required: true
-            }
+            
         ],
         aiprmopts: [
             { prompt: 'What article do you want to rewrite?', type: 'textarea' },
