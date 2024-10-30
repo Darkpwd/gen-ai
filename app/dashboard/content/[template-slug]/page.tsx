@@ -9,6 +9,11 @@ import { Button } from '@/components/ui/Button';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
 import { chatSession } from '@/utils/AiModal';
+import { db } from '@/utils/db';
+import { AIOutput } from '@/utils/schema';
+import { fchown } from 'fs';
+import { useUser } from '@clerk/nextjs';
+import moment from'moment';
 
 
 
@@ -26,6 +31,7 @@ function CreateNewContent(props: PROPS) {
     const selectedTemplate: TEMPLATE | undefined = Templates?.find((item) => item.slug === templateSlug);
     const [loading,setLoading]=useState(false);
     const[aiOutput,setAiOutput]=useState<string>('');
+    const {user}=useUser();
 
     const GenarateAIContent=async(formData:any) => {
         setLoading(true);
@@ -35,9 +41,21 @@ function CreateNewContent(props: PROPS) {
         
         const result = await chatSession.sendMessage(FinalAIPrompt);
 
-        console.log(result.response.text());
         setAiOutput(result?.response.text())
+        await SaveInDb(formData,selectedTemplate?.slug,result?.response.text())
         setLoading(false);
+    }
+
+    const SaveInDb=async(formData:any,slug:any,aiResp:string) => {
+        const result=await db.insert(AIOutput).values({
+            formData:formData,
+            templateSlug:slug,
+            aiResponse:aiResp,
+            createBy:user?.primaryEmailAddress?.emailAddress,
+            createAt:moment().format('DD/MM/yyyy'),
+        });
+        
+        console.log(result);
     }
     return (
         <div className='p-10'>
