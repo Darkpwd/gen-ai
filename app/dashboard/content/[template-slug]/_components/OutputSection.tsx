@@ -16,21 +16,13 @@ function OutputSection({ aiOutput }: Props) {
     editorInstance.setMarkdown(aiOutput);
   }, [aiOutput]);
 
-  const handleCopy = () => {
-    const editorInstance = editorRef.current.getInstance();
-    const markdown = editorInstance.getMarkdown();
-    navigator.clipboard.writeText(markdown).then(() => {
-      alert('Copied to clipboard!'); // Alerta para o usuário
-    }).catch(err => {
-      console.error('Failed to copy: ', err);
-    });
-  };
 
   return (
     <div className='bg-white shadow-lg border rounded-lg'>
       <div className='flex justify-between items-center p-5'>
         <h2 className='font-medium text-lg'>Your Result</h2>
-        <Button className='flex gap-2' onClick={handleCopy}>
+        <Button className='flex gap-2'>
+          onClick=={() =>navigator.clipboard.writeText(aiOutput)}
           <Copy className='w-4 h-4' />
           Copy
         </Button>

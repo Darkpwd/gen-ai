@@ -14,6 +14,8 @@ import { AIOutput } from '@/utils/schema';
 import { fchown } from 'fs';
 import { useUser } from '@clerk/nextjs';
 import moment from'moment';
+import { TotalUsageContext } from '@/app/(context)/TotalUsageContext';
+import { useRouter } from 'next/router';
 
 
 
@@ -32,8 +34,16 @@ function CreateNewContent(props: PROPS) {
     const [loading,setLoading]=useState(false);
     const[aiOutput,setAiOutput]=useState<string>('');
     const {user}=useUser();
+    const router=useRouter();
+    const { totalUsage, setTotalUsage } = useContext(TotalUsageContext);
 
     const GenarateAIContent=async(formData:any) => {
+        if(totalUsage>=10000){
+            
+            console.log("Please make a Upgrade!")
+            router.push('/dashboard/billing')
+            return ;
+        }
         setLoading(true);
         const SelectedPrompt=selectedTemplate?.aiPrompt;
 
