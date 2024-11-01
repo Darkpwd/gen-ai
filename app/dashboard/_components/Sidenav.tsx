@@ -24,9 +24,9 @@ function Sidenav() {
       path: '/dashboard/billing',
     },
     {
-      name: 'Setting',
+      name: 'Settings',
       icon: Settings,
-      path: '/dashboard/setting',
+      path: '/dashboard/settings',
     },
   ];
 
